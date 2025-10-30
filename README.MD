@@ -17,15 +17,6 @@
 
 ---
 
-## ⚙️ Установка
-
-```bash
-git clone https://github.com/YOUR_USER/ggsel-bot.git
-cd ggsel-bot
-python -m venv venv
-source venv/Scripts/activate   # или venv/bin/activate на Linux/Mac
-pip install -r requirements.txt
-
 🧩 Настройка переменных
 
 Создай файл .env на основе примера:

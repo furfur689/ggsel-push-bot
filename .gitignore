@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+env/
+.venv/
+
+# dotenv / env files
+.env
+.env.local
+.env.*.local
+
+# logs / runtime
+*.log
+state.json
+
+# IDEs
+.vscode/
+.idea/
+
+# system
+Thumbs.db
+.DS_Store
