@@ -14,18 +14,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # — Конфигурация только из .env
-BOT_TOKEN = (
-    os.getenv("TG_BOT_TOKEN")
-    or os.getenv("BOT_TOKEN")
-    or os.getenv("TELEGRAM_BOT_TOKEN")
-    or os.getenv("TELEGRAM_TOKEN")
-)
+BOT_TOKEN = os.getenv("TG_BOT_TOKEN")
 
 # API key используется для получения временного session token через /apilogin
-API_KEY = (
-    os.getenv("GGSEL_API_KEY")
-    or os.getenv("API_KEY")
-)
+API_KEY = os.getenv("GGSEL_API_KEY")
 
 # Идентификатор продавца для эндпоинтов продаж
 SELLER_ID = os.getenv("SELLER_ID")
@@ -89,7 +81,7 @@ def _ensure_api_token(force_refresh: bool = False):
     if not SELLER_ID or not str(SELLER_ID).strip():
         raise RuntimeError("Не задан SELLER_ID")
     if not API_KEY:
-        raise RuntimeError("Не задан API ключ (GGSEL_API_KEY/API_KEY)")
+        raise RuntimeError("Не задан API ключ (GGSEL_API_KEY)")
     now = time.time()
     if API_TOKEN and not force_refresh and API_TOKEN_EXPIRES_AT - now > 30:
         return
@@ -140,7 +132,7 @@ def _request_json(url: str, params: dict | None = None, locale_ru: bool = False,
  
 def api_list_chats(filter_new: int | None = None, page: int = 1, pagesize: int = 20, email: str | None = None):
     if not API_KEY:
-        raise RuntimeError("Не задан API ключ (GGSEL_API_KEY/API_KEY)")
+        raise RuntimeError("Не задан API ключ (GGSEL_API_KEY)")
     params = {
         "token": API_TOKEN or "",
         "page": page,
@@ -157,7 +149,7 @@ def api_list_chats(filter_new: int | None = None, page: int = 1, pagesize: int =
 
 def api_list_messages(conversation_id: int, count: int = 50, newer: int | None = None):
     if not API_KEY:
-        raise RuntimeError("Не задан API ключ (GGSEL_API_KEY/API_KEY)")
+        raise RuntimeError("Не задан API ключ (GGSEL_API_KEY)")
     params = {
         "token": API_TOKEN or "",
         "id_i": conversation_id,
@@ -170,7 +162,7 @@ def api_list_messages(conversation_id: int, count: int = 50, newer: int | None =
 
 def api_last_sales(top: int = 4):
     if not API_KEY:
-        raise RuntimeError("Не задан API ключ (GGSEL_API_KEY/API_KEY)")
+        raise RuntimeError("Не задан API ключ (GGSEL_API_KEY)")
     effective_seller_id = SELLER_ID
     if not effective_seller_id:
         raise RuntimeError("Не задан SELLER_ID")
@@ -185,7 +177,7 @@ def api_last_sales(top: int = 4):
 
 def api_purchase_info(invoice_id: int):
     if not API_KEY:
-        raise RuntimeError("Не задан API ключ (GGSEL_API_KEY/API_KEY)")
+        raise RuntimeError("Не задан API ключ (GGSEL_API_KEY)")
     url = f"{PURCHASE_INFO_URL}/{invoice_id}"
     params = {"token": API_TOKEN or ""}
     data = _request_json(url, params=params, locale_ru=True, timeout=60) or {}
@@ -543,8 +535,7 @@ def main():
     print("🚀 Бот запускается...")
     if not BOT_TOKEN or ":" not in BOT_TOKEN or len(BOT_TOKEN) < 30:
         print("❌ Не найден корректный токен Telegram. Проверь .env:")
-        print("   Требуется переменная BOT_TOKEN=xxxxxxxxx:YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
-        print("   Также поддерживаются имена: TELEGRAM_BOT_TOKEN, TELEGRAM_TOKEN, TG_BOT_TOKEN")
+        print("   Требуется переменная TG_BOT_TOKEN=xxxxxxxxx:YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
         print("   Текущая рабочая папка:", os.getcwd())
         raise SystemExit(1)
     # Увеличим таймауты Telegram HTTP-клиента, чтобы избежать TimedOut при отправке
